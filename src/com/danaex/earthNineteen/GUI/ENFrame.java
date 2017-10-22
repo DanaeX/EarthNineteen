@@ -43,6 +43,8 @@ public class ENFrame extends JFrame {
 			galleryItem.setEnabled(false);
 		}
 		
+		menuPanel.disableChat();
+		
 		setLocationByPlatform(true);
 		setSize(1280, 720);
 		setExtendedState(6);

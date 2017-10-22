@@ -109,11 +109,6 @@ public class ImagePanel extends JPanel {
 			
 		} else if (w == h) {
 			
-//			for (; w > getHeight() - 100 || h > getHeight() - 100; h--) {
-//				w--;
-//			}
-			
-			
 			while(w > getWidth() - 100 || h > getHeight() - 100) {
 				w--;
 				h--;
