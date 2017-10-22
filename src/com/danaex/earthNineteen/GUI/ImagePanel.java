@@ -29,14 +29,14 @@ public class ImagePanel extends JPanel {
 	private ToolBarListener tbl = new ToolBarListener();
 
 	private JButton previousButton = new JButton(
-			new ImageIcon((new ImageIcon(getClass().getResource("/img/previous_arrow.png"))).getImage()
+			new ImageIcon((new ImageIcon(getClass().getResource("/ressource/img/previous_arrow.png"))).getImage()
 					.getScaledInstance(25, 25, 1)));
 
 	private JButton nextButton = new JButton(new ImageIcon(
-			(new ImageIcon(getClass().getResource("/img/next_arrow.png"))).getImage().getScaledInstance(25, 25, 1)));
+			(new ImageIcon(getClass().getResource("/ressource/img/next_arrow.png"))).getImage().getScaledInstance(25, 25, 1)));
 
 	private JButton deleteButton = new JButton(new ImageIcon(
-			(new ImageIcon(getClass().getResource("/img/delete.png"))).getImage().getScaledInstance(25, 25, 1)));
+			(new ImageIcon(getClass().getResource("/ressource/img/delete.png"))).getImage().getScaledInstance(25, 25, 1)));
 
 	private ArrayList<Image> images = new ArrayList<Image>();
 

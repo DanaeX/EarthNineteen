@@ -13,7 +13,7 @@ public class ENSplashScreen extends JWindow
     {
         setBackground(Color.WHITE);
         
-        JLabel icon = new JLabel(new ImageIcon(getClass().getResource("/img/splash_screen.png")));
+        JLabel icon = new JLabel(new ImageIcon(getClass().getResource("/ressource/img/splash_screen.png")));
         
         icon.setBorder(new LineBorder(Color.BLACK));
         

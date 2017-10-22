@@ -33,7 +33,7 @@ public class MenuPanel extends JPanel {
 		gc.gridwidth = 0;
 		gc.insets = new Insets(0, 0, 400, 0);
 		
-		images = new JButton("G\351rez vos photos");
+		images = new JButton("Gérez vos photos");
 		images.addActionListener(new ImageButtonListener());
 		images.setPreferredSize(new Dimension(400, 60));
 		
@@ -54,7 +54,7 @@ public class MenuPanel extends JPanel {
 		
 		try {
 			
-			background = ImageIO.read(main.getClass().getResource("/img/background.png"));
+			background = ImageIO.read(main.getClass().getResource("/ressource/img/background.png"));
 			
 		} catch (IOException e) {
 			e.printStackTrace();
