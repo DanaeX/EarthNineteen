@@ -38,13 +38,12 @@ public class ENFrame extends JFrame {
 
 		ff = filefinder;
 		
+		boolean noFile= false;
 		if (ff.noFile && ff.promptFiles()) {
-			menuPanel.disableGallery();
+			noFile = true;
 			galleryItem.setEnabled(false);
 		}
-		
-		menuPanel.disableChat();
-		
+	
 		setLocationByPlatform(true);
 		setSize(1280, 720);
 		setExtendedState(6);
@@ -75,7 +74,11 @@ public class ENFrame extends JFrame {
 		setLayout(cl);
 		
 		add(menuPanel = new MenuPanel(this), "menuPanel");
-		add(imgPanel = new ImagePanel(ff), "imgPanel");
+		add(imgPanel = new ImagePanel(ff, this), "imgPanel");
+		
+		if(noFile) { disableGallery();}
+		
+		menuPanel.disableChat();
 		
 		cl.show(getContentPane(), "menuPanel");
 	}
@@ -91,6 +94,7 @@ public class ENFrame extends JFrame {
 
 	public void returnHome() {
 		cl.show(getContentPane(), "menuPanel");
+		setTitle("EarthNineteen - " + ff.getImageNum() + " pic(s) and " + ff.getVideoNum( )+ " video(s).");
 	}
 	
 	public class MenuBarListener implements ActionListener {
@@ -103,10 +107,16 @@ public class ENFrame extends JFrame {
 				openGallery();
 			}
 			if (e.getSource() == addItem) {
-				ff.addFiles();
-				imgPanel.reloadImages();
+				if(ff.addFiles()) {
+					imgPanel.reloadImages();
+					menuPanel.enableGallery();
+				}
 			}
 		}
+	}
+
+	public void disableGallery() {
+		menuPanel.disableGallery();
 	}
 
 }

@@ -17,8 +17,6 @@ import javax.swing.filechooser.FileFilter;
 
 public class FileFinder {
 
-	private int imageNum;
-	private int videoNum;
 	private Path mainPath;
 	private ArrayList<Path> imgList;
 	private ArrayList<Path> vidList;
@@ -38,8 +36,6 @@ public class FileFinder {
 	}
 
 	private void checkImages(Path imgFolder) {
-		imageNum = 0;
-		videoNum = 0;
 		imgList = new ArrayList<Path>();
 		vidList = new ArrayList<Path>();
 		try {
@@ -49,25 +45,23 @@ public class FileFinder {
 						|| p.getFileName().toString().endsWith(".PNG")
 						|| p.getFileName().toString().endsWith(".JPEG")) {
 					imgList.add(p);
-					imageNum++;
 				}
 				if (p.getFileName().toString().endsWith(".mov") || p.getFileName().toString().endsWith(".mp4")
 						|| p.getFileName().toString().endsWith(".avi") || p.getFileName().toString().endsWith(".wmv")
 						|| p.getFileName().toString().endsWith(".MOV") || p.getFileName().toString().endsWith(".MP4")
 						|| p.getFileName().toString().endsWith(".AVI") || p.getFileName().toString().endsWith(".WMV")) {
 					vidList.add(p);
-					videoNum++;
 				}
 			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		if (imageNum == 0) {
+		if (imgList.size() == 0) {
 			System.out.print("Nothing found in img folder.");
 			noFile = true;
 		} else {
-			System.out.print((new StringBuilder(String.valueOf(imageNum))).append(" image(s) and ").append(videoNum)
+			System.out.print((new StringBuilder(String.valueOf(imgList.size()))).append(" image(s) and ").append(vidList.size())
 					.append(" video(s) were found in img folder.\n").toString());
 		}
 	}
@@ -112,10 +106,10 @@ public class FileFinder {
 	public boolean promptFiles() {
 		int option = JOptionPane.showConfirmDialog(null,
 				"You haven't imported pics or videos yet. Do you want to import some ?", "EarthNineteen", 1, 2);
-		if (option != 0) {
+		if (option != JOptionPane.YES_OPTION) {
 			return true;
 		} else {
-			return addFiles();
+			return !addFiles();
 		}
 	}
 
@@ -146,26 +140,16 @@ public class FileFinder {
 		if (i == JFileChooser.APPROVE_OPTION) {
 			for (File f : files) {
 				try {
-
 					Files.copy(new FileInputStream(f), mainPath.resolve(f.getName()));
-
-					// sourceChannel = (new FileInputStream(f)).getChannel();
-					// destChannel = (new FileOutputStream(
-					// new File((new
-					// StringBuilder(String.valueOf(mainPath.toString()))).append("\\")
-					// .append(f.getName()).toString()))).getChannel();
-					// destChannel.transferFrom(sourceChannel, 0L, sourceChannel.size());
-					// sourceChannel.close();
-					// destChannel.close();
 				} catch (IOException e) {
 					e.printStackTrace();
-					return true;
+					return false;
 				}
 			}
-
+			System.out.println("GATE 1");
 			checkImages(mainPath);
 			int delete = JOptionPane.showConfirmDialog(null,
-					"Do you want to delete original pics ? (This action is irreversible) ", "EarthNineteen", 1, 2);
+					"Do you want to delete original pics ? (This action can't be undone) ", "EarthNineteen", 1, 2);
 			if (delete == JOptionPane.YES_OPTION) {
 				for (File f : files) {
 					try {
@@ -176,18 +160,28 @@ public class FileFinder {
 				}
 
 			}
-			return false;
-		} else {
 			return true;
+		} else {
+			return false;
 		}
 	}
 
 	public int getImageNum() {
-		return imageNum;
+		return imgList.size();
 	}
 
 	public int getVideoNum() {
-		return videoNum;
+		return vidList.size();
+	}
+	
+	public void deleteFileAtIndex(int index) {
+		Path p = imgList.get(index);
+		imgList.remove(index);
+		try {
+			Files.delete(p);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	class FFilter extends FileFilter {
