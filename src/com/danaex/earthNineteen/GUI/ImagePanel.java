@@ -1,6 +1,7 @@
 package com.danaex.earthNineteen.GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -37,10 +38,15 @@ public class ImagePanel extends JPanel {
 
 	private JButton deleteButton = new JButton(new ImageIcon(
 			(new ImageIcon(getClass().getResource("/ressource/img/delete.png"))).getImage().getScaledInstance(25, 25, 1)));
+	
+	private JButton lightButton = new JButton(new ImageIcon(
+			(new ImageIcon(getClass().getResource("/ressource/img/light.png"))).getImage().getScaledInstance(25, 25, 1)));
 
 	private ArrayList<Image> images = new ArrayList<Image>();
 
 	private int index = 0;
+	
+	private boolean light = true;
 
 	public ImagePanel(FileFinder filefinder, ENFrame frame) {
 
@@ -60,11 +66,15 @@ public class ImagePanel extends JPanel {
 		}
 
 		deleteButton.addActionListener(tbl);
+		
+		lightButton.addActionListener(tbl);
 
 		toolBar.add(previousButton);
 		toolBar.add(nextButton);
 		toolBar.addSeparator();
 		toolBar.add(deleteButton);
+		toolBar.addSeparator();
+		toolBar.add(lightButton);
 
 		add(toolBar, BorderLayout.NORTH);
 	}
@@ -86,7 +96,6 @@ public class ImagePanel extends JPanel {
 			}
 
 		}
-		System.out.println("GATE 2 : " + imgList.size());
 		return imgList;
 	}
 
@@ -97,8 +106,14 @@ public class ImagePanel extends JPanel {
 	}
 
 	public void paintComponent(Graphics g) {
-
+		
 		super.paintComponent(g);
+		
+		if(!light) {
+			setBackground(Color.BLACK);
+		} else {
+			setBackground(Color.WHITE);
+		}
 
 		Image img = images.get(index);
 
@@ -204,7 +219,13 @@ public class ImagePanel extends JPanel {
 				
 				repaint();
 				
-			}
+			} else if (e.getSource() == lightButton) {
+				
+				light = !light;
+				
+				repaint();
+				
+			} 
 		}
 
 	}

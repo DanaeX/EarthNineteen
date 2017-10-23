@@ -146,7 +146,6 @@ public class FileFinder {
 					return false;
 				}
 			}
-			System.out.println("GATE 1");
 			checkImages(mainPath);
 			int delete = JOptionPane.showConfirmDialog(null,
 					"Do you want to delete original pics ? (This action can't be undone) ", "EarthNineteen", 1, 2);
