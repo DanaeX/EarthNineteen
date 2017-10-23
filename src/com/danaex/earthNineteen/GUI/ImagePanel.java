@@ -178,6 +178,7 @@ public class ImagePanel extends JPanel {
 				
 				ff.deleteFileAtIndex(index);
 				images.remove(index);
+				main.updateTitle();
 				
 				if(images.isEmpty()) {
 					

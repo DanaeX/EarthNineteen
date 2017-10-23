@@ -87,13 +87,17 @@ public class ENFrame extends JFrame {
 		
 		imgPanel.resetIndex();
 		
-		setTitle("EarthNineteen - " + ff.getImageNum() + " pic(s) and " + ff.getVideoNum( )+ " video(s).");
+		updateTitle();
 		
 		cl.show(getContentPane(), "imgPanel");
 	}
 
 	public void returnHome() {
 		cl.show(getContentPane(), "menuPanel");
+		updateTitle();
+	}
+	
+	public void updateTitle() {
 		setTitle("EarthNineteen - " + ff.getImageNum() + " pic(s) and " + ff.getVideoNum( )+ " video(s).");
 	}
 	
