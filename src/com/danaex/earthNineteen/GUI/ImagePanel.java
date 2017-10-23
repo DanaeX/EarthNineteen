@@ -2,6 +2,7 @@ package com.danaex.earthNineteen.GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
@@ -41,6 +43,8 @@ public class ImagePanel extends JPanel {
 	
 	private JButton lightButton = new JButton(new ImageIcon(
 			(new ImageIcon(getClass().getResource("/ressource/img/light.png"))).getImage().getScaledInstance(25, 25, 1)));
+	
+	private JComboBox<Integer> indexCombo = new JComboBox<Integer>();
 
 	private ArrayList<Image> images = new ArrayList<Image>();
 
@@ -68,13 +72,22 @@ public class ImagePanel extends JPanel {
 		deleteButton.addActionListener(tbl);
 		
 		lightButton.addActionListener(tbl);
+		
+		for(int i=1; i<=images.size(); i++) {
+			indexCombo.addItem(i);
+		}
 
+		indexCombo.addActionListener(tbl);
+		indexCombo.setMaximumSize(new Dimension(50,35));
+		
 		toolBar.add(previousButton);
 		toolBar.add(nextButton);
 		toolBar.addSeparator();
 		toolBar.add(deleteButton);
 		toolBar.addSeparator();
 		toolBar.add(lightButton);
+		toolBar.addSeparator();
+		toolBar.add(indexCombo);
 
 		add(toolBar, BorderLayout.NORTH);
 	}
@@ -100,9 +113,17 @@ public class ImagePanel extends JPanel {
 	}
 
 	public void reloadImages() {
+		
 		images = loadImages();
+		
+		for(int i=1; i<=images.size(); i++) {
+			indexCombo.addItem(i);
+		}
+		
 		resetIndex();
+		
 		repaint();
+		
 	}
 
 	public void paintComponent(Graphics g) {
@@ -163,7 +184,7 @@ public class ImagePanel extends JPanel {
 			
 			if (e.getSource() == previousButton) {
 				
-				index--;
+				indexCombo.setSelectedIndex(index-1);
 				
 				if (index == 0) {
 					previousButton.setEnabled(false);
@@ -177,7 +198,7 @@ public class ImagePanel extends JPanel {
 				
 			} else if (e.getSource() == nextButton) {
 				
-				index++;
+				indexCombo.setSelectedIndex(index+1);
 				
 				if (index == images.size() - 1) {
 					nextButton.setEnabled(false);
@@ -193,7 +214,8 @@ public class ImagePanel extends JPanel {
 				
 				ff.deleteFileAtIndex(index);
 				images.remove(index);
-				main.updateTitle();
+				main.updateTitle();				
+				indexCombo.removeItemAt(indexCombo.getItemCount()-1);
 				
 				if(images.isEmpty()) {
 					
@@ -209,11 +231,11 @@ public class ImagePanel extends JPanel {
 					resetIndex();
 				}  else if(index+1 > images.size()) {
 					
-					index--;
+					indexCombo.setSelectedIndex(index-1);
 					nextButton.setEnabled(false);
 					
 				}else if(index != 0){
-					index--;
+					indexCombo.setSelectedIndex(index-1);
 				}
 				
 				
@@ -222,6 +244,28 @@ public class ImagePanel extends JPanel {
 			} else if (e.getSource() == lightButton) {
 				
 				light = !light;
+				
+				repaint();
+				
+			}  else if (e.getSource() == indexCombo) {
+				
+				int selection = indexCombo.getSelectedIndex();
+				
+				if(images.size() == 1) {
+					previousButton.setEnabled(false);
+					nextButton.setEnabled(false);
+				} else if(selection == 0) {
+					previousButton.setEnabled(false);
+					nextButton.setEnabled(true);
+				} else if (selection+1 == images.size()) {
+					nextButton.setEnabled(false);
+					previousButton.setEnabled(true);
+				} else {
+					previousButton.setEnabled(true);
+					nextButton.setEnabled(true);
+				}
+				
+				index = selection;
 				
 				repaint();
 				
