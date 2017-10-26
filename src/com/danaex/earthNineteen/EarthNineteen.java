@@ -15,6 +15,7 @@ public class EarthNineteen {
 		splashScreen.setVisible(true);
 		
 		FileFinder ff = new FileFinder(System.getProperty("user.home"));
+		
 		SwingUtilities.invokeLater(new Runnable() {
 
 			public void run() {
@@ -22,6 +23,8 @@ public class EarthNineteen {
 				en.setVisible(true);
 			}
 		});
+		
 		splashScreen.dispose();
+		
 	}
 }

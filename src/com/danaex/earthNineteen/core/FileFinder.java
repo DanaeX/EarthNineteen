@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -17,9 +16,11 @@ import javax.swing.filechooser.FileFilter;
 
 public class FileFinder {
 
-	private Path mainPath;
+	private Path enPath;
+	
 	private ArrayList<Path> imgList;
 	private ArrayList<Path> vidList;
+	
 	public boolean noFile;
 
 	public FileFinder(String path) {
@@ -28,11 +29,11 @@ public class FileFinder {
 	}
 
 	private void init(String path) {
-		mainPath = Paths.get(path.toString() + "\\AppData\\Roaming\\EarthNineteen");
-		checkFolders(mainPath);
-		mainPath = Paths.get(path.toString() + "\\AppData\\Roaming\\EarthNineteen\\img");
-		checkFolders(mainPath);
-		checkImages(mainPath);
+		enPath = Paths.get(path + "\\AppData\\Roaming\\EarthNineteen");
+		checkFolders(enPath);
+		enPath = Paths.get(path + "\\AppData\\Roaming\\EarthNineteen\\img");
+		checkFolders(enPath);
+		checkImages(enPath);
 	}
 
 	private void checkImages(Path imgFolder) {
@@ -67,7 +68,7 @@ public class FileFinder {
 	}
 
 	private void checkFolders(Path path) {
-		if (!Files.exists(path, new LinkOption[0])) {
+		if (!Files.exists(path)) {
 			System.out.println("Creating img folder and subfolders.");
 			try {
 				Files.createDirectory(path, new FileAttribute[0]);
@@ -80,7 +81,7 @@ public class FileFinder {
 	public void moveFiles() {
 		for (Path p : imgList) {
 			try {
-				Files.move(p, mainPath, StandardCopyOption.REPLACE_EXISTING);
+				Files.move(p, enPath, StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -89,8 +90,8 @@ public class FileFinder {
 	}
 
 	private void update() {
-		checkFolders(mainPath);
-		checkImages(mainPath);
+		checkFolders(enPath);
+		checkImages(enPath);
 	}
 
 	public ArrayList<Path> getImagesList() {
@@ -140,13 +141,13 @@ public class FileFinder {
 		if (i == JFileChooser.APPROVE_OPTION) {
 			for (File f : files) {
 				try {
-					Files.copy(new FileInputStream(f), mainPath.resolve(f.getName()));
+					Files.copy(new FileInputStream(f), enPath.resolve(f.getName()));
 				} catch (IOException e) {
 					e.printStackTrace();
 					return false;
 				}
 			}
-			checkImages(mainPath);
+			checkImages(enPath);
 			int delete = JOptionPane.showConfirmDialog(null,
 					"Do you want to delete original pics ? (This action can't be undone) ", "EarthNineteen", 1, 2);
 			if (delete == JOptionPane.YES_OPTION) {
